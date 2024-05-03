@@ -2,7 +2,7 @@ FROM public.ecr.aws/paia-tech/ros2-humble:dev
 ENV ROS2_WS /workspaces
 ENV ROS_DOMAIN_ID=1
 ENV ROS_DISTRO humble
-ARG THREADS 4
+ARG THREADS=4
 ARG TARGETPLATFORM
 
 ##### Copy Source Code #####
