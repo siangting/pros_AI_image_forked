@@ -25,14 +25,14 @@ RUN mkdir ${ROS2_WS} && \
     mv /tmp/rebuild_colcon.rc ${ROS2_WS} && \
 
 # Copy the python package requirements.txt.
-    # mv /tmp/requirements.txt /tmp && \
+    mv /tmp/requirements.txt /tmp && \
 
 # Remove the run command in ros2-humble image
     rm /.bashrc && rm /root/.bashrc && rm /ros_entrypoint.sh && \
 
 # Use our pre-defined bashrc
     mv /tmp/.bashrc /root && \
-    ln -s /root/.bashrc /.bashrc
+    ln -s /root/.bashrc /.bashrc && \
 
 # Entrypoint
     mv /tmp/ros_entrypoint.bash /ros_entrypoint.bash && \
