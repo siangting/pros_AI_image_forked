@@ -8,6 +8,10 @@ This project aims to build an image containing `pytorch` and `ros2` for the Jets
 
 This project contains **2 submodules**, please add the git clone flag `--recursive`.
 
+## Shortcut
+
+- `r`: colcon build and source
+- `b`: launch ros bridge server
 
 
 ## Colcon
