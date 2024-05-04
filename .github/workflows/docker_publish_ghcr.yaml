@@ -35,6 +35,7 @@ jobs:
     steps:
       # We need to free some space to build this large image.
       # https://stackoverflow.com/questions/75536771/github-runner-out-of-disk-space-after-building-docker-image
+      # https://github.com/apache/flink/blob/02d30ace69dc18555a5085eccf70ee884e73a16e/tools/azure-pipelines/free_disk_space.sh
       - name: Check initial disk space
         run: df -h
 
@@ -68,7 +69,6 @@ jobs:
           sudo apt-get autoclean -y > /dev/null 2>&1
           echo "some packages purged"
 
-        # https://github.com/apache/flink/blob/02d30ace69dc18555a5085eccf70ee884e73a16e/tools/azure-pipelines/free_disk_space.sh
           echo "=============================================================================="
           echo "Freeing up disk space on CI system"
           echo "=============================================================================="
@@ -86,7 +86,6 @@ jobs:
           sudo apt-get clean
           df -h
           echo "Removing large directories"
-        # deleting 15GB
           rm -rf /usr/share/dotnet/
           df -h
 
