@@ -36,6 +36,7 @@ jobs:
       # We need to free some space to build this large image.
       # https://stackoverflow.com/questions/75536771/github-runner-out-of-disk-space-after-building-docker-image
       # https://github.com/apache/flink/blob/02d30ace69dc18555a5085eccf70ee884e73a16e/tools/azure-pipelines/free_disk_space.sh
+      # Add || true will ignore exit code error.
       - name: Check initial disk space
         run: df -h
 
@@ -77,16 +78,16 @@ jobs:
           dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
           df -h
           echo "Removing large packages"
-          sudo apt-get remove -y '^ghc-8.*'
-          sudo apt-get remove -y '^dotnet-.*'
-          sudo apt-get remove -y '^llvm-.*'
-          sudo apt-get remove -y 'php.*'
-          sudo apt-get remove -y azure-cli google-cloud-sdk hhvm google-chrome-stable firefox powershell mono-devel
+          sudo apt-get remove -y '^ghc-8.*' || true
+          sudo apt-get remove -y '^dotnet-.*' || true
+          sudo apt-get remove -y '^llvm-.*' || true
+          sudo apt-get remove -y 'php.*' || true
+          sudo apt-get remove -y azure-cli google-cloud-sdk hhvm google-chrome-stable firefox powershell mono-devel || true
           sudo apt-get autoremove -y
           sudo apt-get clean
           df -h
           echo "Removing large directories"
-          rm -rf /usr/share/dotnet/
+          rm -rf /usr/share/dotnet/ || true
           df -h
 
       # This is going to pull our code from the repository
