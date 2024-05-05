@@ -80,7 +80,7 @@ RUN mkdir ${ROS2_WS} && \
     ln -s /usr/bin/python3 /usr/bin/python && \
     ln -s /usr/bin/batcat /usr/bin/bat && \
 
-# Install oh-ny-bash
+# Install oh-my-bash
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)" && \
 
 # Use our pre-defined bashrc
