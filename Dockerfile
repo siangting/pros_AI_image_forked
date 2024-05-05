@@ -1,7 +1,7 @@
-FROM public.ecr.aws/paia-tech/ros2-humble:dev
+FROM ros:humble-ros-core-jammy
 ENV ROS2_WS /workspaces
 ENV ROS_DOMAIN_ID=1
-ENV ROS_DISTRO humble
+ENV ROS_DISTRO=humble
 ARG THREADS=4
 ARG TARGETPLATFORM
 
@@ -27,12 +27,8 @@ RUN mkdir ${ROS2_WS} && \
 # Copy the python package requirements.txt.
     # mv /tmp/requirements.txt /tmp && \  # mv: '/tmp/requirements.txt' and '/tmp/requirements.txt' are the same file
 
-# Remove the run command in ros2-humble image
-    rm /.bashrc && rm /root/.bashrc && rm /ros_entrypoint.sh && \
-
-# Use our pre-defined bashrc
-    mv /tmp/.bashrc /root && \
-    ln -s /root/.bashrc /.bashrc && \
+# # Remove the run command in ros2-humble image
+#     rm /.bashrc && rm /root/.bashrc && rm /ros_entrypoint.sh && \
 
 # Entrypoint
     mv /tmp/ros_entrypoint.bash /ros_entrypoint.bash && \
@@ -41,15 +37,82 @@ RUN mkdir ${ROS2_WS} && \
 # System Upgrade
     apt update && \
     apt upgrade -y && \
-    pip3 install --no-cache-dir --upgrade pip && \
 
 # PyTorch and Others Installation
+    apt install -y \
+        axel \
+        bash-completion \
+        bat \
+        bmon \
+        build-essential \
+        curl \
+        git \
+        git-flow \
+        htop \
+        iotop \
+        iproute2 \
+        libncurses5-dev \
+        libncursesw5-dev \
+        ncdu \
+        net-tools \
+        nvtop \
+        python3-colcon-common-extensions \
+        python3-colcon-mixin \
+        python3-pip \
+        python3-rosdep \
+        python3-vcstool \
+        python3-venv \
+        ros-${ROS_DISTRO}-ros-base \
+        ros-${ROS_DISTRO}-rosbridge-suite \
+        screen \
+        tig \
+        tmux \
+        tree \
+        vim \
+        wget \
+        zsh && \
+
+    pip3 install --no-cache-dir --upgrade pip && \
     pip3 install --no-cache-dir -r /tmp/requirements.txt && \
-    apt install -y libncurses5-dev libncursesw5-dev tmux screen ncdu tree zsh axel python3-venv && \
     pip3 install --no-cache-dir torch torchvision torchaudio && \
 
 # Soft Link
     ln -s /usr/bin/python3 /usr/bin/python && \
+    ln -s /usr/bin/batcat /usr/bin/bat && \
+
+# Install oh-ny-bash
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)" && \
+
+# Use our pre-defined bashrc
+    mv /tmp/.bashrc /root && \
+    ln -s /root/.bashrc /.bashrc && \
+
+# bootstrap rosdep
+    rosdep init && \
+    rosdep update --rosdistro $ROS_DISTRO && \
+
+# setup colcon mixin and metadata
+    colcon mixin add default \
+        https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
+    colcon mixin update && \
+    colcon metadata add default \
+        https://raw.githubusercontent.com/colcon/colcon-metadata-repository/master/index.yaml && \
+    colcon metadata update && \
+
+# install ros2 packages
+    apt install -y ros-${ROS_DISTRO}-ros-base && \
+
+# install ros bridge  
+    apt install -y ros-${ROS_DISTRO}-rosbridge-suite ccache && \
+
+# install boost serial and json
+    apt install -y \
+        libboost-all-dev \
+        libboost-program-options-dev \
+        libboost-system-dev \
+        libboost-thread-dev \
+        libserial-dev \
+        nlohmann-json3-dev && \
 
 # cuda toolkit 12.4 Update 1
     if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
@@ -140,9 +203,10 @@ RUN rosdep install -q -y -r --from-paths src --ignore-src && \
 # RUN . /opt/ros/humble/setup.sh && colcon build --event-handlers console_direct+ --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 ##### Post-Settings #####
-# Clear tmp
+# Clear tmp and cache
     rm -rf /tmp/* && \
-    rm -rf /temp/*
+    rm -rf /temp/* && \
+    rm -rf /var/lib/apt/lists/*
 
 # Add nvcc to PATH
 ENV PATH="$PATH:/usr/local/cuda/bin"
