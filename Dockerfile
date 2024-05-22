@@ -201,13 +201,13 @@ RUN rosdep install -q -y -r --from-paths src --ignore-src && \
     # https://wiki.sipeed.com/hardware/zh/maixsense/maixsense-a075v/maixsense-a075v.html?fbclid=IwZXh0bgNhZW0CMTAAAR0no57ZkSZQn1Vp0KB96VTxY7GkhBXH63Mz5LLvd-2o8IOXLnhKPf5IP9Y_aem_AUoqMDGoSwdGA0OwfJt78WNY0xl7XZ5pmuWfUfXxnfEzrEP-D-6yCmQ2ZnQ0-hieiYEBVvUv7tMQ978iflqkcb70
     mv /tmp/sipeed_camera_src/ros2 ${ROS2_WS}/src
 WORKDIR ${ROS2_WS}/src
-RUN colcon build --packages-select ros2 --symlink-install --parallel-workers ${THREADS}
+RUN colcon build --packages-select ros2 --symlink-install --parallel-workers ${THREADS} && \
 
 ##### YDLidar #####
 # SDK compile installation
-WORKDIR /tmp/ydlidar_src/YDLidar-SDK/bulid/
-RUN sh -c "rm -rf ./*" && \
-    cmake .. && \
+    mkdir -p /tmp/ydlidar_src/YDLidar-SDK/build
+WORKDIR /tmp/ydlidar_src/YDLidar-SDK/build/
+RUN cmake .. && \
     make -j && \
     make -j install && \
 
