@@ -4,7 +4,3 @@
 [submodule "rplidar_src/slam_toolbox"]
 	path = rplidar_src/slam_toolbox
 	url = https://github.com/SteveMacenski/slam_toolbox
-[submodule "sipeed_camera_src/vision_opencv"]
-	path = sipeed_camera_src/vision_opencv
-	url = https://github.com/ros-perception/vision_opencv.git
-	branch = humble
