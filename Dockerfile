@@ -29,9 +29,6 @@ RUN mkdir ${ROS2_WS} && \
 # Copy the python package requirements.txt.
     # mv /tmp/requirements.txt /tmp && \  # mv: '/tmp/requirements.txt' and '/tmp/requirements.txt' are the same file
 
-# # Remove the run command in ros2-humble image
-#     rm /.bashrc && rm /root/.bashrc && rm /ros_entrypoint.sh && \
-
 # Entrypoint
     mv /tmp/ros_entrypoint.bash /ros_entrypoint.bash && \
     chmod +x /ros_entrypoint.bash && \
@@ -40,7 +37,7 @@ RUN mkdir ${ROS2_WS} && \
     apt update && \
     apt upgrade -y && \
 
-# PyTorch and Others Installation
+# Necessary System Package Installation
     apt install -y \
         axel \
         bash-completion \
@@ -55,17 +52,12 @@ RUN mkdir ${ROS2_WS} && \
         iproute2 \
         libncurses5-dev \
         libncursesw5-dev \
+        lsof \
         ncdu \
         net-tools \
         nvtop \
-        python3-colcon-common-extensions \
-        python3-colcon-mixin \
         python3-pip \
-        python3-rosdep \
-        python3-vcstool \
         python3-venv \
-        ros-${ROS_DISTRO}-ros-base \
-        ros-${ROS_DISTRO}-rosbridge-suite \
         screen \
         tig \
         tmux \
@@ -76,7 +68,6 @@ RUN mkdir ${ROS2_WS} && \
 
     pip3 install --no-cache-dir --upgrade pip && \
     pip3 install --no-cache-dir -r /tmp/requirements.txt && \
-    pip3 install --no-cache-dir torch torchvision torchaudio && \
 
 # Soft Link
     ln -s /usr/bin/python3 /usr/bin/python && \
@@ -88,6 +79,12 @@ RUN mkdir ${ROS2_WS} && \
 # Use our pre-defined bashrc
     mv /tmp/.bashrc /root && \
     ln -s /root/.bashrc /.bashrc && \
+
+##### ROS2 Installation #####
+# install ros2
+    apt install -y \
+        ros-${ROS_DISTRO}-ros-base \
+        ros-${ROS_DISTRO}-rosbridge-suite && \
 
 # bootstrap rosdep
     rosdep init && \
@@ -102,10 +99,14 @@ RUN mkdir ${ROS2_WS} && \
     colcon metadata update && \
 
 # install ros2 packages
-    apt install -y ros-${ROS_DISTRO}-ros-base && \
-
-# install ros bridge  
-    apt install -y ros-${ROS_DISTRO}-rosbridge-suite ccache && \
+    apt install -y \
+        python3-colcon-common-extensions \
+        python3-colcon-mixin \
+        python3-rosdep \
+        python3-vcstool \
+        ros-${ROS_DISTRO}-ros-base \
+        # install ros bridge
+        ros-${ROS_DISTRO}-rosbridge-suite ccache && \
 
 # install boost serial and json
     apt install -y \
@@ -116,6 +117,7 @@ RUN mkdir ${ROS2_WS} && \
         libserial-dev \
         nlohmann-json3-dev && \
 
+##### Nvidia cuda, cudNN, and PyTorch Installation #####
 # cuda toolkit 12.4 Update 1
     if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
         echo "Install cuda in amd64." >> log.txt && \
@@ -148,7 +150,10 @@ RUN mkdir ${ROS2_WS} && \
         apt -y install cudnn-cuda-12; \
     else \
         echo "Error when installing cudnn 9.1.0!!!" >> log.txt; \
-    fi
+    fi && \
+
+# install torch
+    pip3 install --no-cache-dir torch torchvision torchaudio
 
 WORKDIR ${ROS2_WS}
 
@@ -206,7 +211,7 @@ RUN colcon build --packages-select ros2 --symlink-install --parallel-workers ${T
 ##### YDLidar #####
 # SDK compile installation
     mkdir -p /tmp/ydlidar_src/YDLidar-SDK/build
-WORKDIR /tmp/ydlidar_src/YDLidar-SDK/build/
+WORKDIR /tmp/ydlidar_src/YDLidar-SDK/build
 RUN cmake .. && \
     make -j && \
     make -j install && \
