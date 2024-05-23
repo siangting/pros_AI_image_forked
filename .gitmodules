@@ -10,3 +10,4 @@
 [submodule "ydlidar_src/ydlidar_ros2_ws/src/ydlidar_ros2_driver"]
 	path = ydlidar_src/ydlidar_ros2_ws/src/ydlidar_ros2_driver
 	url = https://github.com/YDLIDAR/ydlidar_ros2_driver
+	branch = humble
