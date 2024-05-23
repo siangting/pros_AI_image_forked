@@ -107,7 +107,7 @@ RUN mkdir ${ROS2_WS} && \
     colcon mixin update && \
     colcon metadata add default \
         https://raw.githubusercontent.com/colcon/colcon-metadata-repository/master/index.yaml && \
-    colcon metadata update && \
+    colcon metadata update
 
 WORKDIR ${ROS2_WS}
 
