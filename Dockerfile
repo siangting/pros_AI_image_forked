@@ -212,7 +212,7 @@ RUN cmake .. && \
     make -j install && \
 
 # colcon build
-    mv /tmp/ydlidar_src/ros2_ws/src/ydlidar_ros2_driver ${ROS2_WS}/src
+    mv /tmp/ydlidar_src/ydlidar_ws/src/ydlidar_ros2_driver ${ROS2_WS}/src
 WORKDIR ${ROS2_WS}/src
 RUN source /opt/ros/humble/setup.bash && \
     colcon build --packages-select ydlidar_ros2_driver --symlink-install --parallel-workers ${THREADS} && \
