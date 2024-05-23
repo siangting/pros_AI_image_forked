@@ -170,6 +170,9 @@ RUN cmake .. && \
     make -j install && \
 
 # colcon build
+    # This is used to fix the YDLidar fatal error: [YDLIDAR] Failed to start scan mode: ffffffff
+    rm /tmp/ydlidar_src/ydlidar_ros2_ws/src/ydlidar_ros2_driver/params/ydlidar.yaml && \
+    mv /tmp/ydlidar_src/ydlidar.yaml /tmp/ydlidar_src/ydlidar_ros2_ws/src/ydlidar_ros2_driver/params/ydlidar.yaml && \
     mv /tmp/ydlidar_src/ydlidar_ros2_ws/src/ydlidar_ros2_driver ${ROS2_WS}/src
 WORKDIR ${ROS2_WS}
 RUN source /opt/ros/humble/setup.bash && \
