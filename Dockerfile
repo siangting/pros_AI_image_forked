@@ -83,23 +83,6 @@ RUN mkdir ${ROS2_WS} && \
 ##### ROS2 Installation #####
 # install ros2
     apt install -y \
-        ros-${ROS_DISTRO}-ros-base \
-        ros-${ROS_DISTRO}-rosbridge-suite && \
-
-# bootstrap rosdep
-    rosdep init && \
-    rosdep update --rosdistro $ROS_DISTRO && \
-
-# setup colcon mixin and metadata
-    colcon mixin add default \
-        https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
-    colcon mixin update && \
-    colcon metadata add default \
-        https://raw.githubusercontent.com/colcon/colcon-metadata-repository/master/index.yaml && \
-    colcon metadata update && \
-
-# install ros2 packages
-    apt install -y \
         python3-colcon-common-extensions \
         python3-colcon-mixin \
         python3-rosdep \
@@ -116,6 +99,18 @@ RUN mkdir ${ROS2_WS} && \
         libboost-thread-dev \
         libserial-dev \
         nlohmann-json3-dev && \
+
+# bootstrap rosdep
+    rosdep init && \
+    rosdep update --rosdistro $ROS_DISTRO && \
+
+# setup colcon mixin and metadata
+    colcon mixin add default \
+        https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
+    colcon mixin update && \
+    colcon metadata add default \
+        https://raw.githubusercontent.com/colcon/colcon-metadata-repository/master/index.yaml && \
+    colcon metadata update && \
 
 ##### Nvidia cuda, cudNN, and PyTorch Installation #####
 # cuda toolkit 12.4 Update 1
