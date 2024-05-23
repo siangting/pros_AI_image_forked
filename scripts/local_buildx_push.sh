@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export IMG_NAME="pros_ai_image"
 export ECR_URL="ghcr.io/otischung"
 export TAG=$(date +%Y%m%d)
