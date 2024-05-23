@@ -1,3 +1,4 @@
+# https://github.com/YDLIDAR/YDLidar-SDK/issues/8
 ydlidar_ros2_driver_node:
   ros__parameters:
     port: /dev/usb_ydlidar
