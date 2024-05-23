@@ -26,9 +26,6 @@ WORKDIR /tmp
 RUN mkdir ${ROS2_WS} && \
     mv /tmp/rebuild_colcon.rc ${ROS2_WS} && \
 
-# Copy the python package requirements.txt.
-    # mv /tmp/requirements.txt /tmp && \  # mv: '/tmp/requirements.txt' and '/tmp/requirements.txt' are the same file
-
 # Entrypoint
     mv /tmp/ros_entrypoint.bash /ros_entrypoint.bash && \
     chmod +x /ros_entrypoint.bash && \
@@ -115,45 +112,7 @@ RUN mkdir ${ROS2_WS} && \
         libboost-system-dev \
         libboost-thread-dev \
         libserial-dev \
-        nlohmann-json3-dev && \
-
-##### Nvidia cuda, cudNN, and PyTorch Installation #####
-# cuda toolkit 12.4 Update 1
-    if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-        echo "Install cuda in amd64." >> log.txt && \
-        axel -n 20 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb && \
-        dpkg -i cuda-keyring_1.1-1_all.deb && \
-        apt update && \
-        apt -y install cuda-toolkit-12-4; \
-    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        echo "Install cuda in arm64." >> log.txt && \
-        axel -n 20 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/sbsa/cuda-keyring_1.1-1_all.deb && \
-        dpkg -i cuda-keyring_1.1-1_all.deb && \
-        apt update && \
-        apt -y install cuda-toolkit-12-4; \
-    else \
-        echo "Error when installing cuda 12.4 update 1!!!" >> log.txt; \
-    fi && \
-
-# cudnn 9.1.0
-    if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-        echo "Install cudnn in amd64." >> log.txt && \
-        axel -n 20 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb && \
-        dpkg -i cuda-keyring_1.1-1_all.deb && \
-        apt update && \
-        apt -y install cudnn-cuda-12; \
-    elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        echo "Install cudnn in arm64." >> log.txt && \
-        axel -n 20 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/sbsa/cuda-keyring_1.1-1_all.deb && \
-        dpkg -i cuda-keyring_1.1-1_all.deb && \
-        apt update && \
-        apt -y install cudnn-cuda-12; \
-    else \
-        echo "Error when installing cudnn 9.1.0!!!" >> log.txt; \
-    fi && \
-
-# install torch
-    pip3 install --no-cache-dir torch torchvision torchaudio
+        nlohmann-json3-dev
 
 WORKDIR ${ROS2_WS}
 
