@@ -113,24 +113,24 @@ RUN mkdir ${ROS2_WS} && \
     colcon metadata update && \
 
 ##### Nvidia cuda, cudNN, and PyTorch Installation #####
-# cuda toolkit 12.4 Update 1
+# cuda toolkit 12.5
     if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
         echo "Install cuda in amd64." >> log.txt && \
         axel -n 20 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb && \
         dpkg -i cuda-keyring_1.1-1_all.deb && \
         apt update && \
-        apt -y install cuda-toolkit-12-4; \
+        apt -y install cuda-toolkit-12-5; \
     elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
         echo "Install cuda in arm64." >> log.txt && \
         axel -n 20 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/sbsa/cuda-keyring_1.1-1_all.deb && \
         dpkg -i cuda-keyring_1.1-1_all.deb && \
         apt update && \
-        apt -y install cuda-toolkit-12-4; \
+        apt -y install cuda-toolkit-12-5; \
     else \
-        echo "Error when installing cuda 12.4 update 1!!!" >> log.txt; \
+        echo "Error when installing cuda 12.5!!!" >> log.txt; \
     fi && \
 
-# cudnn 9.1.0
+# cudnn 9.1.1
     if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
         echo "Install cudnn in amd64." >> log.txt && \
         axel -n 20 https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb && \
