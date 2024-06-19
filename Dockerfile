@@ -197,13 +197,16 @@ RUN rosdep install -q -y -r --from-paths src --ignore-src && \
     . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera_msgs --symlink-install --parallel-workers ${THREADS} && \
     . /opt/ros/humble/setup.sh && colcon build --packages-select astra_camera --symlink-install --parallel-workers ${THREADS} && \
 
-##### Sipeed A075v #####
-    # https://wiki.sipeed.com/hardware/zh/maixsense/maixsense-a075v/maixsense-a075v.html?fbclid=IwZXh0bgNhZW0CMTAAAR0no57ZkSZQn1Vp0KB96VTxY7GkhBXH63Mz5LLvd-2o8IOXLnhKPf5IP9Y_aem_AUoqMDGoSwdGA0OwfJt78WNY0xl7XZ5pmuWfUfXxnfEzrEP-D-6yCmQ2ZnQ0-hieiYEBVvUv7tMQ978iflqkcb70
-    mv /tmp/sipeed_camera_src/ros2 ${ROS2_WS}/src && \
-    colcon build --packages-select ros2 --symlink-install --parallel-workers ${THREADS} && \
+# ##### Sipeed A075v #####
+#     # https://wiki.sipeed.com/hardware/zh/maixsense/maixsense-a075v/maixsense-a075v.html?fbclid=IwZXh0bgNhZW0CMTAAAR0no57ZkSZQn1Vp0KB96VTxY7GkhBXH63Mz5LLvd-2o8IOXLnhKPf5IP9Y_aem_AUoqMDGoSwdGA0OwfJt78WNY0xl7XZ5pmuWfUfXxnfEzrEP-D-6yCmQ2ZnQ0-hieiYEBVvUv7tMQ978iflqkcb70
+#     mv /tmp/sipeed_camera_src/ros2 ${ROS2_WS}/src && \
+#     colcon build --packages-select ros2 --symlink-install --parallel-workers ${THREADS} && \
 
 ##### YDLidar #####
 # SDK compile installation
+    # Use our modified ydlidar_ros2_driver_node.cpp
+    rm /tmp/ydlidar_src/ydlidar_ros2_ws/src/ydlidar_ros2_driver/src/ydlidar_ros2_driver_node.cpp && \
+    mv /tmp/ydlidar_src/ydlidar_ros2_driver_node.cpp /tmp/ydlidar_src/ydlidar_ros2_ws/src/ydlidar_ros2_driver/src && \
     mkdir -p /tmp/ydlidar_src/YDLidar-SDK/build
 WORKDIR /tmp/ydlidar_src/YDLidar-SDK/build
 RUN cmake .. && \
