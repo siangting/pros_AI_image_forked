@@ -148,7 +148,10 @@ RUN mkdir ${ROS2_WS} && \
     fi && \
 
 # install torch
-    pip3 install --no-cache-dir torch torchvision torchaudio
+    pip3 install --no-cache-dir torch torchvision torchaudio && \
+
+# install for RL, stable-baselines3
+    pip3 install --no-cache-dir gymnasium stable-baselines3
 
 WORKDIR ${ROS2_WS}
 
