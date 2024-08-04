@@ -119,6 +119,9 @@ RUN mv /tmp/rplidar_src ./src && \
 # Astra Camera
     mv /tmp/camera_src ./src && \
 
+# Unity Lidar Transformer
+    mv /tmp/unity_lidar_transformer ./src && \
+
 ### Installation ###
 # Rplidar
     rosdep update && \
@@ -180,6 +183,9 @@ RUN cmake .. && \
 WORKDIR ${ROS2_WS}
 RUN source /opt/ros/humble/setup.bash && \
     colcon build --packages-select ydlidar_ros2_driver --symlink-install --parallel-workers ${THREADS} && \
+
+# Unity Lidar Transformer
+    colcon build --packages-select unity_lidar_transformer --symlink-install --parallel-workers ${THREADS} && \
 
 # ##### Build your ROS packages #####
 # # We use mount instead of copy
